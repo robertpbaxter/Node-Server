@@ -12,7 +12,6 @@ const fetchHelloDataFromAPI=()=>{
     .then(text=> console.log(text))
 }
 
-
 const postToOne=()=>{
     const url='http://localhost:3000/test/one'
     
@@ -56,7 +55,35 @@ const postData=()=>{
     .then(response=>response.json())
     .then(function(text){
         console.log(text)
-        testDataAfterFetch.innerHTML=text.testdata.testdata
-        createdAtAfterFetch.innerHTML=text.testdata.createdAt
+        testDataAfterFetch.innerHTML=text.input.testdata
+        createdAtAfterFetch.innerHTML=text.input.createdAt
     })
+}
+
+//4 GET FROM /ONE - Display Data
+const fetchFromOneDisplayData=()=>{
+    let url='http://localhost:3000/test/one'
+    let dataView = document.getElementById('display-one')
+
+    fetch(url,{
+        method:'GET',
+        headers: new Headers({
+            'Content-Type':'application/json'
+        })
+    }).then(
+        response=>response.json()
+    ).catch(
+        error=>console.log('Error:',error)
+    ).then(
+        results=>{
+            let myList = document.querySelector('#getjson')
+
+            for (r of results){
+                console.log('Response:',r.testdata)
+                let listItem=document.createElement('li')
+                listItem.innerHTML=r.testdata
+                myList.appendChild(listItem)
+            }
+        }
+    )
 }

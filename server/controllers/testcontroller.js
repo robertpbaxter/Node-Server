@@ -74,4 +74,20 @@ router.get('/helloclient',(req,res)=>{
     res.send('This is a message from the server to the client: Hello meatbag.')
 })
 
+//GET: One
+router.get('/one',(req,res)=>{
+    TestModel
+        .findAll({
+            attributes:['id','testdata']
+        })
+        .then(
+            findAllSuccess=data=>{
+            console.log('Controller data:', data)
+            res.json(data)
+            },
+            findAllError=err=>res.send(500,err.message)
+        )
+        
+})
+
 module.exports=router
