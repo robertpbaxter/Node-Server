@@ -2,18 +2,6 @@ const router=require('express').Router()
 const User=require('../db').import('../models/user')
 const AuthTestModel=require('../db').import('../models/authtest')
 
-//GET ALL ITEMS FOR INDIVIDUAL USER
-router.get('/getall', (req,res)=>{
-    let userid=req.user.id
-
-    AuthTestModel
-        .findAll({where:{owner:userid}})
-        .then(
-            findAllSuccess=data=>res.json(data),
-            findAllError=err=>res.send(500,err.message)
-        )
-})
-
 //POST SINGLE ITEM FOR INDIVIDUAL USER
 router.post('/create',(req,res)=>{
     let owner=req.user.id
@@ -24,6 +12,18 @@ router.post('/create',(req,res)=>{
         .then(
             createSuccess=authtestdata=>res.json({authtestdata:authtestdata}),
             createError=err=>res.send(500,err.message)
+        )
+})
+
+//GET ALL ITEMS FOR INDIVIDUAL USER
+router.get('/getall', (req,res)=>{
+    let userid=req.user.id
+
+    AuthTestModel
+        .findAll({where:{owner:userid}})
+        .then(
+            findAllSuccess=data=>res.json(data),
+            findAllError=err=>res.send(500,err.message)
         )
 })
 

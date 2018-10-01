@@ -5,7 +5,7 @@ const app=express()
 const log=require('./controllers/logcontroller')
 const user=require('./controllers/usercontroller')
 const sequelize=require('./db')
-const bodyParser=require('body-parse')
+const bodyParser=require('body-parser')
 
 sequelize.sync() //pass in {force:true} for resetting tables
 

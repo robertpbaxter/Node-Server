@@ -1,38 +1,41 @@
 const router=require('express').Router()
-const User=require('../db').import('../models/user')
-const LogModel=require('../db').import('../models/log')
+const Log=require('../db').import('../models/log')
+const validateSession=require('../middleware/validate-session')
 
 //POST: Allows users to create a workoutlog with descriptions, definitions, results, and owner properties
-router.post('/',(req,res)=>{
-    let owner=req.user.id
-    let logData=req.body.logdata.item
-
-    LogModel
-        .create({logdata:logData,owner:owner})
+router.post('/',validateSession,(req,res)=>{
+    if(!req.errors){
+        // let ownr=req.user.id
+        const logFromRequest={
+            description:req.body.description,
+            definition:req.body.definition,
+            result:req.body.result,
+            owner:req.user.id
+        }
+        
+        Log.create(logFromRequest)
         .then(
-            createSuccess=logdata=>res.json({logdata:logdata}),
+            createSuccess=log=>res.json({log:log}),
             createError=err=>res.send(500,err.message)
         )
+    }else{res.status(500).json(req.errors)}
 })
 
 //GET: Get all logs for an individual user
-router.get('/',(req,res)=>{
-    let userid=req.user.id
-
-    LogModel
-        .findAll({where:{owner:userid}})
-        .then(
-            findAllSuccess=data=>res.json(data),
-            findAllError=err=>res.send(500,err.message)
+router.get('/',validateSession,(req,res)=>{
+    Log.findAll({where:{owner:req.user.id}})
+    .then(
+        findAllSuccess=data=>res.json(data),
+        findAllError=err=>res.send(500,err.message)
         )
 })
 
 //GET: Gets individual logs by id for an individual user
-router.get('/:id',(req,res)=>{
+router.get('/:id',validateSession,(req,res)=>{
     let data=req.params.id
     let userid=req.user.id
 
-    LogModel
+    Log
         .findOne({where:{id:data,owner:userid}})
         .then(
             findOneSuccess=data=>res.json(data),
@@ -41,27 +44,22 @@ router.get('/:id',(req,res)=>{
 })
 
 //PUT: Allows individual logs to be updated by a user
-router.put('/:id',(req,res)=>{
-    let data=req.params.id
-    let logdata=req.body.logdata.item
-
-    LogModel
-        .update({logdata:logdata},{where:{id:data}})
-        .then(
-            updateSucces=updatedLog=>res.json({logdata:logdata}),
-            updateError=err=>res.send(500,err.message)
-        )
+router.put('/:id',validateSession,(req,res)=>{
+    // res.send(req.body)
+    if(!req.errors){
+        Log.update(req.body,{where:{id:req.params.id}})
+        .then(log=>res.status(200).json(log))
+        .catch(err=>res.json(req.errors))
+    }else{res.status(500),json(req.errors)}
 })
 
 //DELETE: Allows individual logs to be deleted by a user
-router.delete('/:id',(req,res)=>{
-    let data=req.params.id
-    let userid=req.user.id
-
-    LogModel
-        .destroy({where:{id:data,owner:userid}})
-        .then(
-            deleteLogSuccess=data=>res.send('Log removed'),
-            deleteLogError=err=>res.send(500,err.message)
-        )
+router.delete('/:id',validateSession,(req,res)=>{
+    if(!req.errors){
+        Log.destroy({where:{id:req.params.id}})
+        .then(log=>res.status(200).json(log))
+        .catch(err=>res.status(500).json(req.errors))  
+    }else(res.status(500).json(req.errors))
 })
+
+module.exports=router
