@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "Postgres?Chinchilla&58701",
+    "database": "workoutlog",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "",
+    "password": "Postgres?Chinchilla&58701",
+    "database": "workoutlog",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "",
+    "password": "Postgres?Chinchilla&58701",
+    "database": "workoutlog",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
