@@ -32,11 +32,8 @@ router.get('/',validateSession,(req,res)=>{
 
 //GET: Gets individual logs by id for an individual user
 router.get('/:id',validateSession,(req,res)=>{
-    let data=req.params.id
-    let userid=req.user.id
-
     Log
-        .findOne({where:{id:data,owner:userid}})
+        .findOne({where:{id:req.params.id,owner:req.user.id}})
         .then(
             findOneSuccess=data=>res.json(data),
             findOneError=err=>res.send(500,err.message)
@@ -50,7 +47,7 @@ router.put('/:id',validateSession,(req,res)=>{
         Log.update(req.body,{where:{id:req.params.id}})
         .then(log=>res.status(200).json(log))
         .catch(err=>res.json(req.errors))
-    }else{res.status(500),json(req.errors)}
+    }else{res.status(500).json(req.errors)}
 })
 
 //DELETE: Allows individual logs to be deleted by a user
