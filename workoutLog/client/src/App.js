@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import Auth from './auth/Auth'
 import SiteBar from './home/Navbar'
-import Splash from './home/Splash'
+import WorkoutIndex from './workouts/WorkoutIndex'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import { AuthContext } from './auth/AuthContext';
 
-class App extends Component { 
+export default class App extends Component { 
   constructor(){
     super()
+    this.setToken=token=>{
+      localStorage.setItem('token',token)
+      this.setState({sessionToken:token})
+    }
+    
     this.state={
-      sessionToken:'' //best place to handle storing info in React
+      sessionToken:'', //best place to handle storing info in React
+      setToken:this.setToken
     }
   }
 
@@ -34,7 +41,7 @@ class App extends Component {
       return(
         <Switch>
           <Route path='/' exact>
-            <Splash sessionToken={this.state.sessionToken}/> 
+            <WorkoutIndex/>
           </Route>
         </Switch>
       ) //render splash if authorized
@@ -50,13 +57,13 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
-          <SiteBar clickLogout={this.logout}/>
-          {this.protectedViews()}
-        </div>
+        <AuthContext.Provider value={this.state}>
+          <div>
+            <SiteBar clickLogout={this.logout}/>
+            {this.protectedViews()}
+          </div>
+        </AuthContext.Provider>  
       </Router>
     );
   }
 }
-
-export default App;

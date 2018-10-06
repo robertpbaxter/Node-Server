@@ -1,7 +1,8 @@
 import React,{Component} from 'react'
 import {Button,Form,FormGroup,Label,Input} from 'reactstrap'
+import {AuthContext} from '../auth/AuthContext'
 
-export default class WorkoutCreate extends Component{
+class WorkoutCreate extends Component{
     constructor(props){
         super(props)
         this.state={
@@ -23,7 +24,7 @@ export default class WorkoutCreate extends Component{
             body:JSON.stringify({log:this.state}), //throws the current state into the body as an object with key 'log'
             headers:new Headers({
                 'Content-Type':'application/json',
-                'Authorization':this.props.token
+                'Authorization':this.props.auth.token
             })
         }).then(res=>res.json())
         .then(logData=>{
@@ -66,3 +67,9 @@ export default class WorkoutCreate extends Component{
         )
     }
 }
+
+export default props=>(
+    <AuthContext.Consumer>
+        {auth=><WorkoutCreate {...props} auth={auth}/>}
+    </AuthContext.Consumer>
+)

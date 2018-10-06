@@ -1,7 +1,8 @@
 import React,{Component} from 'react'
 import {Form,FormGroup,Label,Input,Button} from 'reactstrap'
+import {AuthContext} from './AuthContext'
 
-export default class Signup extends Component{
+class Signup extends Component{
     constructor(props){
         super(props)
         this.state={
@@ -28,7 +29,7 @@ export default class Signup extends Component{
                     'Content-Type':'application/json' //let the server know what kind of information is coming
                 })
             }).then(res=>res.json())
-            .then(data=>{this.props.setToken(data.sessionToken) //
+            .then(data=>{this.props.auth.setToken(data.sessionToken) //
             })
         }
         e.preventDefault()
@@ -55,3 +56,9 @@ export default class Signup extends Component{
         )
     }
 }
+
+export default props=>(
+    <AuthContext.Consumer>
+        {auth=><Signup {...props} auth={auth}/>}
+    </AuthContext.Consumer>
+)

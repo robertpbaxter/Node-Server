@@ -3,8 +3,9 @@ import {Container, Row, Col} from 'reactstrap'
 import WorkoutCreate from './WorkoutCreate'
 import WorkoutTable from './WorkoutTable'
 import WorkoutEdit from './WorkoutEdit'
+import {AuthContext} from '../auth/AuthContext'
 
-export default class WorkoutIndex extends Component{
+class WorkoutIndex extends Component{
     constructor(props){
         super(props)
         this.state={
@@ -23,7 +24,7 @@ export default class WorkoutIndex extends Component{
             method:'GET',
             headers: new Headers({
                 'Content-Type':'application/json',
-                'Authorization':this.props.token
+                'Authorization':this.props.auth.token
             })
         }).then(res=>res.json())
         .then(logData=>{
@@ -37,7 +38,7 @@ export default class WorkoutIndex extends Component{
             body:JSON.stringify({log:{id:e.target.id}}),
             headers:new Headers({
                 'Content-Type':'application/json',
-                'Authorization':this.props.token
+                'Authorization':this.props.auth.token
             })
         })
         .then(res=>this.fetchWorkouts()) //once an item is deleted, this refreshes the table
@@ -50,7 +51,7 @@ export default class WorkoutIndex extends Component{
             body:JSON.stringify({log:workout}),
             headers:new Headers({
                 'Content-Type':'application/json',
-                'Authorization':this.props.token
+                'Authorization':this.props.auth.token
             })
         }).then(res=>{
             this.setState({updatePressed:false})//button is set to true in the function below, this resets it
@@ -90,3 +91,9 @@ export default class WorkoutIndex extends Component{
         )
     }
 }
+
+export default props=>(
+    <AuthContext.Consumer>
+        {auth=><WorkoutIndex {...props} auth={auth}/>}
+    </AuthContext.Consumer>
+)
