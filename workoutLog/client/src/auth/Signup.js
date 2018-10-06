@@ -17,16 +17,20 @@ export default class Signup extends Component{
     }
     
     handleSubmit=(e)=>{
-        fetch('http://localhost:3000/api/user',{
-            method:'POST', //tell what type of fetch is happening
-            body:JSON.stringify({user:this.state}), //server should expect the format of this informatino
-            headers: new Headers({
-                'Content-Type':'application/json' //let the server know what kind of information is coming
+        if (this.state.username===''){
+            let validateUsername=document.getElementById('validateUsername')
+            validateUsername.innerText='user name is required'
+        }else{
+            fetch('http://localhost:3000/api/user',{
+                method:'POST', //tell what type of fetch is happening
+                body:JSON.stringify({user:this.state}), //server should expect the format of this informatino
+                headers: new Headers({
+                    'Content-Type':'application/json' //let the server know what kind of information is coming
+                })
+            }).then(res=>res.json())
+            .then(data=>{this.props.setToken(data.sessionToken) //
             })
-        }).then(res=>res.json())
-        .then(data=>{this.props.setToken(data.sessionToken) //
-        })
-
+        }
         e.preventDefault()
     }
 
@@ -39,6 +43,7 @@ export default class Signup extends Component{
                     <FormGroup>
                         <Label for='username'>Username</Label>
                         <Input id='username' type='text' name='username' placeholder='enter username' onChange={this.handleChange}/>
+                        <span id='validateUsername'></span>
                     </FormGroup>
                     <FormGroup>
                         <Label for='password'>Password</Label>

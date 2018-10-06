@@ -1,10 +1,18 @@
 import React,{Component} from 'react'
-import {Navbar,NavbarBrand} from 'reactstrap'
+import {Navbar,NavbarBrand,NavbarToggler,Collapse,Nav,NavItem,Button} from 'reactstrap'
 
 export default class SiteBar extends Component{
     constructor(props){
         super(props)
-        this.state={}
+        this.state={
+            isOpen:false
+        }
+    }
+
+    toggle=()=>{
+        this.setState({
+            isOpen:!this.state.isOpen
+        })
     }
 
     render(){
@@ -12,6 +20,14 @@ export default class SiteBar extends Component{
             <div>
                 <Navbar color='faded' light expand='md'>
                     <NavbarBrand href='/'>Workout Log</NavbarBrand>
+                    <NavbarToggler onClick={this.toggle}/>
+                    <Collapse isOpen={this.state.isOpen} navbar>
+                        <Nav className='ml-auto' navbar>
+                            <NavItem>
+                                <Button onClick={()=>this.props.clickLogout()}>Logout</Button>
+                            </NavItem>
+                        </Nav>
+                    </Collapse>
                 </Navbar>
             </div>
         )

@@ -24,11 +24,16 @@ class App extends Component {
     this.setState({sessionToken:token})
   }
 
+  logout=()=>{
+    this.setState({sessionToken:''})
+    localStorage.clear()
+  }
+
   render() {
     return (
       <div>
-        <SiteBar/>
-        <Auth/>
+        <SiteBar clickLogout={this.logout}/>
+        <Auth setToken={this.setSessionState}/>
       </div>
     );
   }
