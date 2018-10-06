@@ -44,7 +44,7 @@ router.get('/:id',validateSession,(req,res)=>{
 router.put('/:id',validateSession,(req,res)=>{
     // res.send(req.body)
     if(!req.errors){
-        Log.update(req.body,{where:{id:req.params.id}})
+        Log.update(req.body.log,{where:{id:req.params.id}})
         .then(log=>res.status(200).json(log))
         .catch(err=>res.json(req.errors))
     }else{res.status(500).json(req.errors)}
