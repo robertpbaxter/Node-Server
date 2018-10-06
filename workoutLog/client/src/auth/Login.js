@@ -41,12 +41,12 @@ class Login extends Component {
                     <Button type='submit'>Submit</Button>
                 </Form>
             </div>
-        )
+        )//ids with 'li' refer to login
     }
 
     
 }
 
-//ids with 'li' refer to login
+
 
 export default Login

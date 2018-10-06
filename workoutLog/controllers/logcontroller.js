@@ -7,9 +7,9 @@ router.post('/',validateSession,(req,res)=>{
     if(!req.errors){
         // let ownr=req.user.id
         const logFromRequest={
-            description:req.body.description,
-            definition:req.body.definition,
-            result:req.body.result,
+            description:req.body.log.description,
+            definition:req.body.log.definition,
+            result:req.body.log.result,
             owner:req.user.id
         }
         
